@@ -1,5 +1,5 @@
 # =====================================================
-# PLANTVILLAGE DATASET - TÜRKÇE SINIF ADLARI
+# PLANTVILLAGE DATASET - TURKISH CLASS NAMES
 # =====================================================
 
 import numpy as np
@@ -10,7 +10,7 @@ from tensorflow.keras.applications.resnet50 import preprocess_input
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # -----------------------------------------------------
-# YOLLAR
+# PATHS
 # -----------------------------------------------------
 MODEL_PATH = r"D:\plant_resnet50_v2.h5"
 IMAGE_PATH = r"D:\elmacuruk.jpg"
@@ -18,13 +18,12 @@ TRAIN_DIR  = r"D:\small_dataset"   # bu klasörün içi ekran görüntüsündeki
 IMG_SIZE = 224
 
 # -----------------------------------------------------
-# MODELİ YÜKLE
+# UPLOAD THE MODEL
 # -----------------------------------------------------
 model = load_model(MODEL_PATH)
 print("✔ Model yüklendi")
 
 # -----------------------------------------------------
-# SINIF ADLARINI OTOMATİK AL (KLASÖRLERDEN)
 # -----------------------------------------------------
 datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
 
@@ -40,7 +39,7 @@ tmp_gen = datagen.flow_from_directory(
 class_names = {v: k for k, v in tmp_gen.class_indices.items()}
 
 # -----------------------------------------------------
-# İNGİLİZCE → TÜRKÇE SINIF ADLARI
+# FROM ENGLISH TO TURKISH CLASS NAMES
 # -----------------------------------------------------
 turkce = {
     "Apple___Apple_scab": "Elma – Elma Karalekesi",
@@ -97,7 +96,7 @@ turkce = {
 }
 
 # -----------------------------------------------------
-# GÖRSELİ YÜKLE
+# UPLOAD THE IMAGE
 # -----------------------------------------------------
 img = image.load_img(IMAGE_PATH, target_size=(IMG_SIZE, IMG_SIZE))
 img_array = image.img_to_array(img)
@@ -105,7 +104,7 @@ img_array = np.expand_dims(img_array, axis=0)
 img_array = preprocess_input(img_array)
 
 # -----------------------------------------------------
-# TAHMİN
+# PREDICTION
 # -----------------------------------------------------
 pred = model.predict(img_array)
 
@@ -115,7 +114,7 @@ pred_tr = turkce.get(pred_en, pred_en)
 confidence = float(np.max(pred))
 
 # -----------------------------------------------------
-# SONUÇ
+# RESULT
 # -----------------------------------------------------
 print("📌 Tahmin:", pred_tr)
 print("📊 Güven:", round(confidence * 100, 2), "%")
